@@ -23,6 +23,14 @@ if (!fs.existsSync(outputsDir)) {
 async function scrapeUltaProducts(url, desiredCount) {
   const browser = await chromium.launch({
     headless: true,
+     channel: "chrome",
+    args: [
+      "--disable-gpu",
+      "--disable-dev-shm-usage",
+      "--disable-setuid-sandbox",
+      "--no-sandbox",
+    ],
+    timeout: 120000,
   });
 
   const page = await browser.newPage();
