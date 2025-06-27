@@ -1,14 +1,18 @@
-const fs = require("fs");
-const path = require("path");
-const { chromium } = require("playwright");
-const { createExcelFile } = require("./helpers/fileUtils");
-const {
+import fs from "fs";
+import path from "path";
+import { chromium } from "playwright";
+import { createExcelFile } from "./helpers/fileUtils.js";
+import {
   getCurrentProductCount,
   collectUntilCount,
-} = require("./helpers/scraperUtils");
+} from "./helpers/scraperUtils.js";
+import { fileURLToPath } from "url";
+
+// Get the current directory equivalent to __dirname in ESM
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const targetUrl = "https://www.ulta.com/brand/chanel";
-
 
 const desiredProductCount = 500;
 const outputsDir = path.join(__dirname, "outputs");

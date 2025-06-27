@@ -1,12 +1,11 @@
-const XLSX = require("xlsx");
-const path = require("path");
+import XLSX from "xlsx";
 
 function getNextFilename(baseName) {
   // Not needed anymore since we're using timestamps
   return `${baseName}.xlsx`;
 }
 
-function createExcelFile(
+export function createExcelFile(
   filename,
   data,
   collectionName,
@@ -44,5 +43,3 @@ function createExcelFile(
 
   XLSX.writeFile(workbook, filename);
 }
-
-module.exports = { getNextFilename, createExcelFile };

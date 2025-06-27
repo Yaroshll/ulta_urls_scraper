@@ -1,6 +1,6 @@
 // helpers/scraperUtils.js
 
-async function getCurrentProductCount(page) {
+export async function getCurrentProductCount(page) {
   try {
     await page.waitForSelector("ul.ProductListingResults__productList", {
       timeout: 15000,
@@ -42,7 +42,7 @@ async function getCurrentProductCount(page) {
   }
 }
 
-async function attemptLoadMore(page) {
+export async function attemptLoadMore(page) {
   try {
     const button = await page.$("button.LoadContent__button:not([disabled])");
     if (button) {
@@ -79,7 +79,11 @@ async function waitForNewProducts(page, previousCount) {
   }
 }
 
-async function collectUntilCount(page, targetCount, collectedProducts = []) {
+export async function collectUntilCount(
+  page,
+  targetCount,
+  collectedProducts = []
+) {
   let attempts = 0;
   const maxAttempts = 10;
   let lastCount = 0;
@@ -134,9 +138,3 @@ async function collectUntilCount(page, targetCount, collectedProducts = []) {
 
   return collectedProducts;
 }
-
-module.exports = {
-  getCurrentProductCount,
-  collectUntilCount,
-  attemptLoadMore,
-};
