@@ -8,11 +8,16 @@ async function getCurrentProductCount(page) {
 
     // Try to get count from "You have viewed X of Y"
     try {
+      console.log("first");
       const countText = await page.$eval(
         "p.Text-ds.Text-ds--body-2.Text-ds--center.Text-ds--black",
         (el) => el.textContent.trim()
       );
+      console.log({ countText });
       const matches = countText.match(/You have viewed (\d+) of (\d+)/);
+      console.log({ matches });
+      console.log("1: ", parseInt(matches[1]));
+      console.log("2: ", parseInt(matches[2]));
       if (matches) {
         return {
           current: parseInt(matches[1]),

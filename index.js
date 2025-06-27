@@ -1,13 +1,16 @@
 const fs = require("fs");
 const path = require("path");
 const { chromium } = require("playwright");
-const { getNextFilename, createExcelFile } = require("./helpers/fileUtils");
+const { createExcelFile } = require("./helpers/fileUtils");
 const {
   getCurrentProductCount,
   collectUntilCount,
 } = require("./helpers/scraperUtils");
 
-// Ensure outputs directory exists
+const targetUrl = "https://www.ulta.com/brand/chanel";
+
+
+const desiredProductCount = 500;
 const outputsDir = path.join(__dirname, "outputs");
 if (!fs.existsSync(outputsDir)) {
   fs.mkdirSync(outputsDir);
@@ -16,24 +19,9 @@ if (!fs.existsSync(outputsDir)) {
 async function scrapeUltaProducts(url, desiredCount) {
   const browser = await chromium.launch({
     headless: true,
-    channel: "chrome",
-    args: [
-      "--disable-gpu",
-      "--disable-dev-shm-usage",
-      "--disable-setuid-sandbox",
-      "--no-sandbox",
-    ],
-    timeout: 120000,
   });
 
-  const context = await browser.newContext({
-    viewport: { width: 1920, height: 1080 },
-    ignoreHTTPSErrors: true,
-    userAgent:
-      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
-  });
-
-  const page = await context.newPage();
+  const page = await browser.newPage();
 
   try {
     console.log(`Navigating to ${url}...`);
@@ -114,9 +102,5 @@ async function scrapeUltaProducts(url, desiredCount) {
     await browser.close();
   }
 }
-
-// Example usage
-const targetUrl = "https://www.ulta.com/brand/it-cosmetics";
-const desiredProductCount = 65;
 
 scrapeUltaProducts(targetUrl, desiredProductCount);
