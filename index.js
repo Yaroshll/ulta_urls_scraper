@@ -28,16 +28,16 @@ async function scrapeUltaProducts(url, desiredCount) {
   const page = await browser.newPage();
 
   try {
-    console.log(`Navigating to ${url}...`);
+    console.info(`Navigating to ${url}...`);
     await page.goto(url, { waitUntil: "domcontentloaded", timeout: 90000 });
 
     const { current, total } = await getCurrentProductCount(page);
-    console.log(
+    console.info(
       `Found ${current} products on initial page out of ${total} total`
     );
 
     const targetCount = Math.min(desiredCount, total);
-    console.log(`Targeting ${targetCount} product URLs...`);
+    console.info(`Targeting ${targetCount} product URLs...`);
 
     const collectedProducts = [];
     await collectUntilCount(page, targetCount, collectedProducts);
@@ -45,7 +45,7 @@ async function scrapeUltaProducts(url, desiredCount) {
     const uniqueProducts = [
       ...new Map(collectedProducts.map((item) => [item.url, item])).values(),
     ];
-    console.log(
+    console.info(
       `Successfully collected ${uniqueProducts.length} unique product URLs`
     );
 
@@ -59,14 +59,14 @@ async function scrapeUltaProducts(url, desiredCount) {
       outputsDir,
       `${filenameBase}_${timestamp}.xlsx`
     );
-    await createExcelFile(
+    createExcelFile(
       excelFilename,
       uniqueProducts,
       urlPath,
       uniqueProducts.length,
       total
     );
-    console.log(`Excel file saved to ${excelFilename}`);
+    console.info(`Excel file saved to ${excelFilename}`);
 
     // Create JSON file with updated format
     const urls = uniqueProducts.map((p) => p.url);
@@ -99,7 +99,7 @@ async function scrapeUltaProducts(url, desiredCount) {
       JSON.stringify(jsonStructure, null, 2),
       "utf-8"
     );
-    console.log(`✅ JSON file saved to ${jsonFilename}`);
+    console.info(`✅ JSON file saved to ${jsonFilename}`);
   } catch (error) {
     console.error("Scraping error:", error);
   } finally {

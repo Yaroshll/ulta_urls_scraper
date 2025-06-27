@@ -8,16 +8,11 @@ export async function getCurrentProductCount(page) {
 
     // Try to get count from "You have viewed X of Y"
     try {
-      console.log("first");
       const countText = await page.$eval(
         "p.Text-ds.Text-ds--body-2.Text-ds--center.Text-ds--black",
         (el) => el.textContent.trim()
       );
-      console.log({ countText });
       const matches = countText.match(/You have viewed (\d+) of (\d+)/);
-      console.log({ matches });
-      console.log("1: ", parseInt(matches[1]));
-      console.log("2: ", parseInt(matches[2]));
       if (matches) {
         return {
           current: parseInt(matches[1]),
@@ -25,7 +20,7 @@ export async function getCurrentProductCount(page) {
         };
       }
     } catch {
-      console.log("Could not parse count text, using fallback");
+      console.error("Could not parse count text, using fallback");
     }
 
     // Fallback: count visible products
@@ -48,14 +43,14 @@ export async function attemptLoadMore(page) {
     if (button) {
       await button.scrollIntoViewIfNeeded();
       await button.click();
-      console.log('"Load More" button clicked');
+      console.info('"Load More" button clicked');
       return true;
     } else {
-      console.log("No Load More button found");
+      console.info("No Load More button found");
     }
     return false;
   } catch (error) {
-    console.log("Load more click failed:", error.message);
+    console.info("Load more click failed:", error.message);
     return false;
   }
 }
@@ -74,7 +69,7 @@ async function waitForNewProducts(page, previousCount) {
     );
     return true;
   } catch {
-    console.log("Timeout waiting for new products to load");
+    console.error("Timeout waiting for new products to load");
     return false;
   }
 }
@@ -104,31 +99,31 @@ export async function collectUntilCount(
 
       if (currentProducts.length > 0) {
         collectedProducts.push(...currentProducts);
-        console.log(
+        console.info(
           `Added ${currentProducts.length} products (Total: ${collectedProducts.length})`
         );
         attempts = 0;
         lastCount = collectedProducts.length;
       } else {
         attempts++;
-        console.log(
+        console.info(
           `No new products found (Attempt ${attempts}/${maxAttempts})`
         );
       }
 
       if (collectedProducts.length < targetCount) {
-        console.log("Trying to click Load More...");
+        console.info("Trying to click Load More...");
         const loadedMore = await attemptLoadMore(page);
         if (loadedMore) {
           await waitForNewProducts(page, lastCount);
         } else {
-          console.log("No Load More or failed to load more");
+          console.info("No Load More or failed to load more");
           break;
         }
       }
     } catch (error) {
       attempts++;
-      console.log(
+      console.error(
         `Collection error (Attempt ${attempts}/${maxAttempts}):`,
         error.message
       );
