@@ -12,7 +12,7 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const targetUrl = "https://www.ulta.com/brand/chanel";
+const targetUrl = "https://www.ulta.com/brand/ulta-beauty-collection";
 
 const desiredProductCount = 500;
 const outputsDir = path.join(__dirname, "outputs");
@@ -22,7 +22,7 @@ if (!fs.existsSync(outputsDir)) {
 
 async function scrapeUltaProducts(url, desiredCount) {
   const browser = await chromium.launch({
-    headless: true,
+    headless:true,
      channel: "chrome",
     args: [
       "--disable-gpu",
@@ -30,7 +30,7 @@ async function scrapeUltaProducts(url, desiredCount) {
       "--disable-setuid-sandbox",
       "--no-sandbox",
     ],
-    timeout: 120000,
+    timeout: 1200000,
   });
 
   const page = await browser.newPage();
