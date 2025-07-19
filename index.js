@@ -11,8 +11,8 @@ import { fileURLToPath } from "url";
 // Get the current directory equivalent to __dirname in ESM
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-const targetUrl = "https://www.ulta.com/brand/chanel";
+//This brand url must be changed when the code is run
+const targetUrl = "https://www.ulta.com/brand/ulta-beauty-collection";
 
 const desiredProductCount = 500;
 const outputsDir = path.join(__dirname, "outputs");
@@ -23,6 +23,14 @@ if (!fs.existsSync(outputsDir)) {
 async function scrapeUltaProducts(url, desiredCount) {
   const browser = await chromium.launch({
     headless: true,
+    channel: "chrome",
+    args: [
+      "--disable-gpu",
+      "--disable-dev-shm-usage",
+      "--disable-setuid-sandbox",
+      "--no-sandbox",
+    ],
+    timeout: 1200000,
   });
 
   const page = await browser.newPage();

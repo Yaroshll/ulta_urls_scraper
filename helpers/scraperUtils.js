@@ -3,7 +3,7 @@
 export async function getCurrentProductCount(page) {
   try {
     await page.waitForSelector("ul.ProductListingResults__productList", {
-      timeout: 15000,
+      timeout: 150000,
     });
 
     // Try to get count from "You have viewed X of Y"
@@ -64,7 +64,7 @@ async function waitForNewProducts(page, previousCount) {
         );
         return products.length > prev;
       },
-      { timeout: 15000 },
+      { timeout: 150000 },
       previousCount
     );
     return true;
@@ -127,7 +127,7 @@ export async function collectUntilCount(
         `Collection error (Attempt ${attempts}/${maxAttempts}):`,
         error.message
       );
-      await page.waitForTimeout(2000);
+      await page.waitForTimeout(20000);
     }
   }
 
